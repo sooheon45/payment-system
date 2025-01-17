@@ -9,18 +9,10 @@ spring:
     gateway:
 #<<< API Gateway / Routes
       routes:
-        - id: request payment
+        - id: request-payment
           uri: http://localhost:8082
           predicates:
             - Path=/payments/**, 
-        - id: credit cards
-          uri: http://localhost:8083
-          predicates:
-            - Path=, 
-        - id: cash
-          uri: http://localhost:8084
-          predicates:
-            - Path=, 
         - id: frontend
           uri: http://localhost:8080
           predicates:

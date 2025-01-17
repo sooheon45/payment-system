@@ -28,17 +28,17 @@ export default new Router({
                 component: RequestPaymentPaymentDetail
             },
             {
-                path: '/requestPayments/pay',
+                path: '/requestPayments/pay/:id',
                 name: 'RequestPayment',
                 component: RequestPayment
             },
             {
-                path: '/requestPayments/refund',
+                path: '/requestPayments/refund/:id',
                 name: 'RefundPayment',
                 component: RefundPayment
             },
             {
-                path: '/requestPayments/receipt',
+                path: '/requestPayments/receipt/:id',
                 name: 'SearchReceipt',
                 component: SearchReceipt
             },

@@ -3,8 +3,9 @@
         <v-card v-if="serviceType == 'pay'" style="width: 500px;">
             <v-card-title> 결제하기 </v-card-title>
             <v-card-text>
-                <v-text-field disabled v-model="paymentId" label="주문번호"/>
+                <v-text-field disabled v-model="paymentId" label="결제 번호"/>
 
+                <v-text-field disabled v-model="requestInfo.orderId" label="주문 번호" />
                 <v-text-field required v-model="requestInfo.name" label="상품명" />
                 <v-text-field required v-model="requestInfo.price" label="가격" />
              
@@ -64,7 +65,7 @@
             requestInfo: {
                 type: Object,
                 default: () => ({
-                    paymentId: "",
+                    orderId: "",
                     price: 0,
                     name: "",
                     buyerId: "",
@@ -112,8 +113,24 @@
 
 
                 if (response.success) {
-                    alert(`결제 성공 : ${response}`)
+                    await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
+                        {
+                            id: me.requestInfo.orderId,
+                            paymentId: me.paymentId,
+                            status: "SUCESS",
+                            reason: response.message
+                        }
+                    )
+                    alert(`결제 성공`)
                 } else {
+                    await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
+                        {
+                            id: me.requestInfo.orderId,
+                            paymentId: me.paymentId,
+                            status: "CANCELLED",
+                            reason: response.message
+                        }
+                    )
                     alert(`결제 실패 : ${response.message}`)
                 }
             },  

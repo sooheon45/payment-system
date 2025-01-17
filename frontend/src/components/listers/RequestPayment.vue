@@ -14,13 +14,25 @@
             </v-row>
         </v-card>
         <v-col style="margin-bottom:40px;">
-            <payment serviceType="pay" :requestInfo="info"></payment>
+            <div v-if="isLoading">
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    style="margin-left:50%; margin-top:10%;"
+                ></v-progress-circular>
+            </div>
+            <div v-else>
+                <payment v-if="isValidation" serviceType="pay" :requestInfo="info"></payment>
+                <div v-else> 결제 정보가 없습니다. </div>
+            </div>
+           
         </v-col>
     </div>
 </template>
 
 <script>
     import PaymentService from './PaymentService.vue';
+    import axios from 'axios';
 
     export default {
         name: 'RequestPaymentPaymentManager',
@@ -31,16 +43,27 @@
             offline: Boolean
         },
         data: () => ({
-            info: {}
+            info: {},
+            isValidation: false,
+            isLoading: false,
         }),
         async created() {
-            this.info = {
-                price : 10000, // 결제 가격
-                name : "상품명", // 결제 상품명
-                buyerId : "buyerId", // 결제 구매자 아이디
-                buyerName : "구매자명", // 결제 구매자 이름
-                buyerTel: "010-1234-5678", // 결제 구매자 전화번호
-                buyerEmail: "buyerEmail@example.com", // 결제 구매자 이메일
+            try {
+                const id = this.$route.params.id;
+                this.isLoading = true
+                const response = await axios.get(`http://localhost:8088/payments/${id}`);
+
+                if(response.status == 200) {
+                    response.data.orderId = id
+                    this.info = response.data
+                    this.isValidation = true
+                } else {
+                    this.isValidation = false
+                }
+                this.isLoading = false     
+            } catch(e) {
+                this.isValidation = false
+                this.isLoading = false     
             }
         },
         methods:{
