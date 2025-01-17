@@ -7,7 +7,9 @@ Vue.use(Router);
 
 import RequestPaymentPaymentManager from "./components/listers/RequestPaymentPaymentCards"
 import RequestPaymentPaymentDetail from "./components/listers/RequestPaymentPaymentDetail"
-
+import RequestPayment from "./components/listers/RequestPayment.vue"
+import RefundPayment from "./components/listers/RefundPayment.vue"
+import SearchReceipt from "./components/listers/SearchReceipt.vue"
 
 
 
@@ -24,6 +26,21 @@ export default new Router({
                 path: '/requestPayments/payments/:id',
                 name: 'RequestPaymentPaymentDetail',
                 component: RequestPaymentPaymentDetail
+            },
+            {
+                path: '/requestPayments/pay',
+                name: 'RequestPayment',
+                component: RequestPayment
+            },
+            {
+                path: '/requestPayments/refund',
+                name: 'RefundPayment',
+                component: RefundPayment
+            },
+            {
+                path: '/requestPayments/receipt',
+                name: 'SearchReceipt',
+                component: SearchReceipt
             },
 
 

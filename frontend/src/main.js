@@ -4,6 +4,8 @@ import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import Managing from "./components";
 import router from './router';
+import jQuery from 'jquery'; // jQuery import
+window.$ = window.jQuery = jQuery; // 전역으로 jQuery 설정
 Vue.config.productionTip = false;
 require('./GlobalStyle.css');
 
