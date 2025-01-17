@@ -29,37 +29,15 @@ jobs:
       
       - name: Build Maven Projects
         run: |
-          mvn clean package -f ./request payment/pom.xml
-          mvn clean package -f ./credit cards/pom.xml
-          mvn clean package -f ./cash/pom.xml
+          mvn clean package -f ./payment/pom.xml
 
-      - name: Docker Build and push for RequestPayment
+      - name: Docker Build and push for Payment
         uses: docker/build-push-action@v4
         with:
-          context: ./request payment
+          context: ./payment
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/request-payment:latest
-            ghcr.io/${{ github.repository }}/request-payment:${{ github.ref_name }}
-            
-      - name: Docker Build and push for CreditCards
-        uses: docker/build-push-action@v4
-        with:
-          context: ./credit cards
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/credit-cards:latest
-            ghcr.io/${{ github.repository }}/credit-cards:${{ github.ref_name }}
-            
-      - name: Docker Build and push for Cash
-        uses: docker/build-push-action@v4
-        with:
-          context: ./cash
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/cash:latest
-            ghcr.io/${{ github.repository }}/cash:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}/payment:latest
+            ghcr.io/${{ github.repository }}/payment:${{ github.ref_name }}
             

@@ -20,9 +20,7 @@ cd /bin
 ## Run the backend micro-services
 See the README.md files inside the each microservices directory:
 
-- request payment
-- credit cards
-- cash
+- payment
 
 
 ## Run API Gateway (Spring Gateway)
@@ -32,15 +30,9 @@ mvn spring-boot:run
 ```
 
 ## Test by API
-- request payment
+- payment
 ```
- http :8088/payments id="id"amount="amount"issuedDate="issued date"approvalDate="approval date"refunedDate="refuned date"
-```
-- credit cards
-```
-```
-- cash
-```
+ http :8088/payments id="id"paymethod="paymethod"storeId="storeId"price="price"timeStamp="timeStamp"name="name"buyerName="buyerName"buyerTel="buyerTel"buyerEmail="buyerEmail"
 ```
 
 

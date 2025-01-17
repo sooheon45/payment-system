@@ -35,7 +35,7 @@
                     <v-list-item
                         class="px-2"
                         key="payments"
-                        to="/requestPayments/payments"
+                        to="/payments/payments"
                         @click="changeUrl()"
                         color="primary"
                         style="font-weight:700;"
@@ -44,8 +44,16 @@
                     </v-list-item>
 
 
-
-
+                    <v-list-item
+                        class="px-2"
+                        key="paymentReceipts"
+                        to="/payments/paymentReceipts"
+                        @click="changeUrl()"
+                        color="primary"
+                        style="font-weight:700;"
+                    >
+                        PaymentReceipt
+                    </v-list-item>
                 </v-list>
             </v-navigation-drawer>
         </div>
@@ -126,9 +134,16 @@ export default {
         aggregate: [
             { 
                 title: 'Payment', 
-                description: 'payment을 관리하는 화면입니다.', 
+                description: 'Payment을 관리하는 화면입니다.', 
                 key: 'payments', 
-                route: '/requestPayments/payments',
+                route: '/payments/payments',
+                ImageUrl: '',
+            },
+            { 
+                title: 'PaymentReceipt', 
+                description: 'Payment receipt을 관리하는 화면입니다.', 
+                key: 'paymentReceipts', 
+                route: '/payments/paymentReceipts',
                 ImageUrl: '',
             },
             
