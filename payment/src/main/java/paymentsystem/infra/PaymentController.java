@@ -21,35 +21,45 @@ public class PaymentController {
     PaymentRepository paymentRepository;
 
     @RequestMapping(
-        value = "/payments/requsetpayment",
-        method = RequestMethod.POST,
+        value = "/payments/{id}/requsetpayment",
+        method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
     public Payment requsetPayment(
+        @PathVariable(value = "id") Long id,
+        @RequestBody RequsetPaymentCommand requsetPaymentCommand,
         HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody RequsetPaymentCommand requsetPaymentCommand
+        HttpServletResponse response
     ) throws Exception {
         System.out.println("##### /payment/requsetPayment  called #####");
-        Payment payment = new Payment();
+        Optional<Payment> optionalPayment = paymentRepository.findById(id);
+
+        optionalPayment.orElseThrow(() -> new Exception("No Entity Found"));
+        Payment payment = optionalPayment.get();
         payment.requsetPayment(requsetPaymentCommand);
+
         paymentRepository.save(payment);
         return payment;
     }
 
     @RequestMapping(
-        value = "/payments/requestrefund",
-        method = RequestMethod.POST,
+        value = "/payments/{id}/requestrefund",
+        method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
     public Payment requestRefund(
+        @PathVariable(value = "id") Long id,
+        @RequestBody RequestRefundCommand requestRefundCommand,
         HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody RequestRefundCommand requestRefundCommand
+        HttpServletResponse response
     ) throws Exception {
         System.out.println("##### /payment/requestRefund  called #####");
-        Payment payment = new Payment();
+        Optional<Payment> optionalPayment = paymentRepository.findById(id);
+
+        optionalPayment.orElseThrow(() -> new Exception("No Entity Found"));
+        Payment payment = optionalPayment.get();
         payment.requestRefund(requestRefundCommand);
+
         paymentRepository.save(payment);
         return payment;
     }
