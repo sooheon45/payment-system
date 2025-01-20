@@ -117,7 +117,7 @@
                         {
                             id: me.requestInfo.orderId,
                             paymentId: me.paymentId,
-                            status: "SUCESS",
+                            status: "SUCCESS",
                             reason: response.message
                         }
                     )
@@ -127,7 +127,7 @@
                         {
                             id: me.requestInfo.orderId,
                             paymentId: me.paymentId,
-                            status: "SUCESS",
+                            status: "SUCCESS",
                             reason: response.message
                         }
                     )
