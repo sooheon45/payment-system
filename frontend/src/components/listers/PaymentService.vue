@@ -127,11 +127,20 @@
                         {
                             id: me.requestInfo.orderId,
                             paymentId: me.paymentId,
-                            status: "CANCELLED",
+                            status: "SUCESS",
                             reason: response.message
                         }
                     )
-                    alert(`결제 실패 : ${response.message}`)
+                    alert(`결제 성공`)
+                    // await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
+                    //     {
+                    //         id: me.requestInfo.orderId,
+                    //         paymentId: me.paymentId,
+                    //         status: "CANCELLED",
+                    //         reason: response.message
+                    //     }
+                    // )
+                    // alert(`결제 실패 : ${response.message}`)
                 }
             },  
             async refund(){
