@@ -15,27 +15,13 @@
         </v-card>
         <v-col>
             <div>
-                <v-dialog width="400"
-                    v-model="openDialog"
-                >
                 <!-- 모드 종류 : receipt(영수증 조회), pay(결제정보), receipt(환불관련),paymentDetail()  -->
-                    <Payment
-                        @close="closeDialog" 
-                        :serviceType="'pay'" 
-                        :paymentDetail="false"
-                        :editMode="false"
-                        :requestInfo="requestInfo"
-                    />
-                </v-dialog>
-
-                <v-btn 
-                    v-on="on"
-                    class="mx-auto"
-                    @click="setRequestInfo()"
-                    color="primary"
-                >
-                    결제
-                </v-btn>
+                <Payment
+                    :serviceType="'pay'" 
+                    :paymentDetail="false"
+                    :editMode="false"
+                    :requestInfo="requestInfo"
+                />
             </div>
         </v-col>
         <v-row>
@@ -61,7 +47,6 @@
             values: [],
             newValue: {},
             tick : true,
-            openDialog : false,
             // paymentDetail : false,
             requestInfo: {
                 orderId: '',
@@ -103,10 +88,6 @@
                     buyerEmail: 'kibum0405@gmail.com',
                     reason: ''
                 };
-                this.openDialog = true;
-            },
-            closeDialog(){
-                this.openDialog = false
             },
             append(value){
                 this.tick = false
