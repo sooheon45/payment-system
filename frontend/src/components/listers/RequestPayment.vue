@@ -31,13 +31,13 @@
 </template>
 
 <script>
-    import PaymentService from './PaymentService.vue';
+    import Payment from './Payment.vue';
     import axios from 'axios';
 
     export default {
         name: 'RequestPaymentPaymentManager',
         components: {
-            'payment': PaymentService
+            'payment': Payment
         },
         props: {
             offline: Boolean

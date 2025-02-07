@@ -13,63 +13,35 @@
                 </v-list-item>
             </v-row>
         </v-card>
-        <v-col style="margin-bottom:40px;">
-            <div class="text-center">
-                <v-dialog
-                        v-model="openDialog"
-                        width="332.5"
-                        fullscreen
-                        hide-overlay
-                        transition="dialog-bottom-transition"
+        <v-col>
+            <div>
+                <v-dialog width="400"
+                    v-model="openDialog"
                 >
-                    <RequestPaymentPayment :offline="offline" class="video-card" :isNew="true" :editMode="true" v-model="newValue" 
-                            @add="append" v-if="tick"/>
-
-                    <v-btn
-                            style="postition:absolute; top:2%; right:2%"
-                            @click="closeDialog()"
-                            depressed
-                            icon 
-                            absolute
-                    >
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
+                <!-- 모드 종류 : receipt(영수증 조회), pay(결제정보), receipt(환불관련),paymentDetail()  -->
+                    <Payment v-if="tick"
+                        v-model="newValue" 
+                        :isNew="true"
+                        @close="closeDialog" 
+                        :serviceType="'pay'" 
+                        :paymentDetail="true"
+                        :editMode="false"
+                        :requestInfo="requestInfo"
+                    />
                 </v-dialog>
 
-                <v-row>
-                    <v-card
-                        class="mx-auto"
-                        style="height:300px; width:300px; margin-bottom:20px; text-align: center;"
-                        outlined
-                    >
-                        <v-list-item>
-                            <v-list-item-avatar 
-                                class="mx-auto"
-                                size="80"
-                                style="margin-top:80px;"
-                            ><v-icon color="primary" x-large>mdi-plus</v-icon>
-                            </v-list-item-avatar>
-                        </v-list-item>
-
-                        <v-card-actions>
-                            <v-btn 
-                                v-on="on"
-                                class="mx-auto"
-                                outlined
-                                rounded
-                                @click="openDialog=true;"
-                                color="primary"
-                                style="font-weight:500; font-size:20px; padding:15px; border:solid 2px; max-width:250px; overflow:hidden"
-                            >
-                                Payment 등록
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-row>
+                <v-btn 
+                    v-on="on"
+                    class="mx-auto"
+                    @click="setRequestInfo()"
+                    color="primary"
+                >
+                    결제
+                </v-btn>
             </div>
         </v-col>
         <v-row>
-            <RequestPaymentPayment :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
+            <Payment :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
         </v-row>
     </div>
 </template>
@@ -77,12 +49,12 @@
 <script>
 
     const axios = require('axios').default;
-    import RequestPaymentPayment from './../RequestPaymentPayment.vue';
+    import Payment from './Payment';
 
     export default {
         name: 'RequestPaymentPaymentManager',
         components: {
-            RequestPaymentPayment,
+            Payment,
         },
         props: {
             offline: Boolean
@@ -92,6 +64,17 @@
             newValue: {},
             tick : true,
             openDialog : false,
+            paymentDetail : false,
+            requestInfo: {
+                orderId: '',
+                price: 0,
+                name: '',
+                buyerId: '',
+                buyerName: '',
+                buyerTel: '',
+                buyerEmail: '',
+                reason: ''
+            },
         }),
         async created() {
             var me = this;
@@ -111,6 +94,19 @@
             }
         },
         methods:{
+            setRequestInfo() {
+                this.requestInfo = {
+                    orderId: '2',
+                    price: 129000,
+                    name: '키보드',
+                    buyerId: 'kibum',
+                    buyerName: '박기범',
+                    buyerTel: '010-0000-0000',
+                    buyerEmail: 'kibum0405@gmail.com',
+                    reason: ''
+                };
+                this.openDialog = true;
+            },
             closeDialog(){
                 this.openDialog = false
             },

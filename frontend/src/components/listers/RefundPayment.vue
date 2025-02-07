@@ -19,12 +19,12 @@
 </template>
 
 <script>
-    import PaymentService from './PaymentService.vue';
+    import Payment from './Payment.vue';
 
     export default {
         name: 'RequestPaymentPaymentManager',
         components: {
-            'payment': PaymentService
+            'payment': Payment
         },
         data: () => ({
             info: {}
