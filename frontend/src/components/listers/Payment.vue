@@ -4,7 +4,7 @@
             <div v-if="serviceType == 'pay'"
                 style="width:100%;"
             >
-                <v-row class="ma-0 pa-4">
+                <v-row class="ma-0 pa-4 pb-0">
                     <v-card-title class="pa-0">결제하기</v-card-title>
                     <v-spacer></v-spacer>
                     <v-icon @click="close()">mdi-close</v-icon>
@@ -14,27 +14,18 @@
                     <v-row class="ma-0 pa-0">
                         <div class="sub-title">
                             <div>결제 번호 : {{ paymentId }}</div>
-                        </div>
-                        <div class="sub-title">
                             <div>주문 번호 : {{ requestInfo.orderId }}</div>
                         </div>
                     </v-row>
 
                     <v-divider class="mt-2 mb-2"></v-divider>
-                    
-                    <div v-if="paymentDetail && editMode">
+                    {{ paymentDetail }}
+                    <!-- pay 디테일 -->
+                    <div v-if="paymentDetail">
                         <v-text-field outlined v-model="requestInfo.buyerName" label="구매자 성명" />
                         <v-text-field outlined v-model="requestInfo.buyerEmail" label="구매자 이메일" />
                         <v-text-field outlined v-model="requestInfo.buyerId" label="구매자 아이디" />
                         <v-text-field outlined v-model="requestInfo.buyerTel" label="구매자 전화번호" />
-                    </div>
-                    <div v-else>
-                        <div class="sub-title">
-                            <div>구매자 성명 : {{ requestInfo.buyerName }}</div>
-                            <div>구매자 이메일 : {{ requestInfo.buyerEmail }}</div>
-                            <div>구매자 아이디 : {{ requestInfo.buyerId }}</div>
-                            <div>구매자 전화번호 : {{ requestInfo.buyerTel }}</div>
-                        </div>
                     </div>
                 </v-card-text>
                 <v-row class="ma-0 pa-4">
@@ -43,29 +34,38 @@
                 </v-row>
             </div>
             <div v-if="serviceType == 'refund'">
-                <v-row class="ma-0 pa-4">
+                <v-row class="ma-0 pa-4 pb-0">
                     <v-card-title class="pa-0">환불하기</v-card-title>
                     <v-spacer></v-spacer>
                     <v-icon @click="close()">mdi-close</v-icon>
                 </v-row>
                 <v-card-text class="payment-dialog-scroll">
                     <v-text-field outlined required v-model="requestInfo.paymentId" label="환불 주문번호 입력" />
-                    <v-text-field outlined required v-model="requestInfo.price" label="환불 가격" />
-                    <v-text-field outlined required v-model="requestInfo.reason" label="환불 사유"/>
+                    <v-textarea
+                        outlined
+                        required
+                        v-model="requestInfo.reason"
+                        label="환불 사유"
+                        auto-grow
+                        :rows="3"
+                    />
                 </v-card-text>
-                <v-row class="ma-0 pa-4">
+                <v-row class="ma-0 pa-4 align-center">
+                    <div style="font-size:16px; font-weight: 700;">환불 금액 : {{ formattedPrice }}원</div>
                     <v-spacer></v-spacer>
                     <v-btn @click="refund()" color="primary">환불</v-btn>
                 </v-row>
             </div>
             <div v-if="serviceType == 'receipt'">
-                <v-row class="ma-0 pa-4">
+                <v-row class="ma-0 pa-4 pb-0">
                     <v-card-title class="pa-0">영수증 조회</v-card-title>
                     <v-spacer></v-spacer>
                     <v-icon @click="close()">mdi-close</v-icon>
                 </v-row>
                 <div class="payment-dialog-scroll">
-                    <v-text-field outlined required v-model="requestInfo.paymentId" label="조회 주문번호 입력" />
+                    <div class="pa-4">
+                        <v-text-field outlined required v-model="requestInfo.paymentId" label="조회 주문번호 입력" />
+                    </div>
                     <v-card-text v-if="isReceiptCompleted">
                         <v-text-field outlined disabled v-model="receiptInfo.name" label="상품명"/>
                         <v-text-field outlined disabled v-model="receiptInfo.price" label="가격"/>
@@ -113,7 +113,6 @@
                 })
             },
             paymentDetail: Boolean,
-            editMode: Boolean
         },
         data: () => ({
             paymentId: `payment-${crypto.randomUUID()}`,

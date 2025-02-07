@@ -19,12 +19,10 @@
                     v-model="openDialog"
                 >
                 <!-- 모드 종류 : receipt(영수증 조회), pay(결제정보), receipt(환불관련),paymentDetail()  -->
-                    <Payment v-if="tick"
-                        v-model="newValue" 
-                        :isNew="true"
+                    <Payment
                         @close="closeDialog" 
                         :serviceType="'pay'" 
-                        :paymentDetail="true"
+                        :paymentDetail="false"
                         :editMode="false"
                         :requestInfo="requestInfo"
                     />
@@ -64,7 +62,7 @@
             newValue: {},
             tick : true,
             openDialog : false,
-            paymentDetail : false,
+            // paymentDetail : false,
             requestInfo: {
                 orderId: '',
                 price: 0,
