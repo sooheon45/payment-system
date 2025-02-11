@@ -45,7 +45,7 @@ mvn spring-boot:run
 ```
 ```
  http 호출
- http POST http://localhost:8088/payments price=10000 name='Mac Book' buyerId='LEE' buyerName='구매자명' buyerTel='010-1234-5678' buyerEmail='buyerEmail@example.com'
+ http POST http://localhost:8088/payments price=10000 name='Mac Book' buyerId='LEE' buyerName='구매자명' buyerTel='010-1234-5678' buyerEmail='buyerEmail@example.com' paymentId='abc-123'
 ```
 
 

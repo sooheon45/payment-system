@@ -15,18 +15,29 @@
         </v-card>
         <v-col>
             <div>
-                <!-- 모드 종류 : receipt(영수증 조회), pay(결제정보), receipt(환불관련),paymentDetail()  -->
+                <!-- 모드 종류 : receipt(영수증 조회), pay(결제정보), refund(환불관련), buyerInfoMode(구매자 정보 표시관련)  -->
                 <Payment
                     :serviceType="'pay'" 
-                    :paymentDetail="false"
-                    :editMode="false"
+                    :buyerInfoMode="true"
+                    :requestInfo="requestInfo"
+                />
+
+                <Payment
+                    :serviceType="'refund'" 
+                    :buyerInfoMode="true"
+                    :requestInfo="requestInfo"
+                />
+
+                <Payment
+                    :serviceType="'receipt'" 
+                    :buyerInfoMode="true"
                     :requestInfo="requestInfo"
                 />
             </div>
         </v-col>
-        <v-row>
+        <!-- <v-row>
             <Payment :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
-        </v-row>
+        </v-row> -->
     </div>
 </template>
 
@@ -47,7 +58,7 @@
             values: [],
             newValue: {},
             tick : true,
-            // paymentDetail : false,
+            // buyerInfoMode : false,
             requestInfo: {
                 orderId: '',
                 price: 0,
