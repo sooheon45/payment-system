@@ -141,6 +141,7 @@
                         </div>
                         <v-card-text v-if="isReceiptCompleted" class="pb-0">
                             <v-card class="pa-4 mb-2" outlined>
+                                <div class="sub-title">상품 정보</div>
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">상품명</div>
                                     <v-spacer></v-spacer>
@@ -157,6 +158,7 @@
                                 class="pa-4"
                                 outlined
                             >
+                                <div class="sub-title">구매자 정보</div>
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">구매자 성명</div>
                                     <v-spacer></v-spacer>
