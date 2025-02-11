@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --target wc --name payment-system-app ./src/web-component.js",
+    "start": "serve -l 8080 dist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
     "express": "^4.17.3",
     "jquery": "^3.7.1",
     "request": "^2.88.2",
+    "serve": "^14.2.4",
     "uuid": "^11.0.5",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",
