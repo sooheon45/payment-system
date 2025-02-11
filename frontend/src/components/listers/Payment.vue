@@ -20,7 +20,8 @@
                         <v-icon @click="closeDialog()">mdi-close</v-icon>
                     </v-row>
                     <v-card-text class="payment-dialog-scroll">
-                        <v-card class="pa-4 mb-2" outlined>
+                        <div>
+                            <v-divider class="my-2 mt-0"></v-divider>
                             <div class="sub-title">상품 정보</div>
                             <h3 v-if="requestInfo.name" class="pb-2">{{ requestInfo.name }}</h3>
                             <v-row class="ma-0 pa-0">
@@ -29,9 +30,10 @@
                                     <div>주문 번호 : {{ requestInfo.orderId }}</div>
                                 </div>
                             </v-row>
-                        </v-card>
+                        </div>
                         <!-- pay 디테일 -->
-                        <v-card v-if="buyerInfoMode" class="pa-4 pb-0" outlined>
+                        <div v-if="buyerInfoMode">
+                            <v-divider class="my-2"></v-divider>
                             <div class="sub-title">구매자 정보 입력</div>
                             <v-text-field 
                                 dense 
@@ -61,7 +63,8 @@
                                 label="구매자 전화번호" 
                                 :rules="[v => /^(\d{2,3})-?(\d{3,4})-?(\d{4})$/.test(v) || '유효한 전화번호를 입력하세요.']"
                             />
-                        </v-card>
+                        </div>
+                        <v-divider></v-divider>
                     </v-card-text>
                     <v-row class="sub-title pa-4 pb-0 pt-0 ma-0">
                         <div style="font-size:20px;">결제금액</div>
@@ -87,7 +90,8 @@
                         <v-icon @click="closeDialog()">mdi-close</v-icon>
                     </v-row>
                         <v-card-text class="payment-dialog-scroll">
-                            <v-card class="pa-4 mb-2" outlined>
+                            <div>
+                                <v-divider class="my-2 mt-0"></v-divider>
                                 <div class="sub-title">환불 정보 입력</div>
                                 <v-text-field v-model="requestInfo.paymentId"
                                     dense 
@@ -104,21 +108,24 @@
                                     auto-grow
                                     :rows="3"
                                 />
-                        </v-card>
+                            </div>
                     </v-card-text>
 
-                    <v-row class="sub-title pa-4 pb-0 pt-0 ma-0">
-                        <div style="font-size:20px;">환불 금액</div>
-                        <v-spacer></v-spacer>
-                        <div style="font-size:20px;
-                        font-weight: 700"
-                        >{{ formattedPrice }}원</div>
-                    </v-row>
-                    <div class="pa-4">
-                        <v-btn @click="refund()"
-                            color="primary"
-                            style="width:100%;"
-                        >환불</v-btn>
+                    <div class="pa-4 pt-0">
+                        <v-divider class="my-2"></v-divider>
+                        <v-row class="sub-title pa-0 pb-0 pt-0 ma-0">
+                            <div style="font-size:20px;">환불 금액</div>
+                            <v-spacer></v-spacer>
+                            <div style="font-size:20px;
+                            font-weight: 700"
+                            >{{ formattedPrice }}원</div>
+                        </v-row>
+                        <div class="pa-4 pl-0 pr-0 pb-0">
+                            <v-btn @click="refund()"
+                                color="primary"
+                                style="width:100%;"
+                            >환불</v-btn>
+                        </div>
                     </div>
                 </div>
 
@@ -139,47 +146,47 @@
                                 dense
                             />
                         </div>
-                        <v-card-text v-if="isReceiptCompleted" class="pb-0">
-                            <v-card class="pa-4 mb-2" outlined>
+                        <!--   -->
+                        <v-card-text class="pb-0">
+                            <div>
+                                <v-divider class="my-2"></v-divider>
                                 <div class="sub-title">상품 정보</div>
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">상품명</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.name }}</div>
+                                    <div>{{ receiptInfo.name || '키보드' }}</div>
                                 </v-row>
-                                <v-row class="sub-text ma-0 pa-0 mt-4">
+                                <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">가격</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.price }}</div>
+                                    <div>{{ receiptInfo.price || '129,000원' }}</div>
                                 </v-row>
-                            </v-card>
+                            </div>
 
-                            <v-card v-if="buyerInfoMode"
-                                class="pa-4"
-                                outlined
-                            >
+                            <div v-if="buyerInfoMode">
+                                <v-divider class="my-2"></v-divider>
                                 <div class="sub-title">구매자 정보</div>
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">구매자 성명</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerName }}</div>
+                                    <div>{{ receiptInfo.buyerName || '박기범' }}</div>
                                 </v-row>
-                                <v-row class="sub-text ma-0 pa-0 mt-4">
+                                <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 이메일</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerEmail }}</div>
+                                    <div>{{ receiptInfo.buyerEmail || 'kibum0405@gmail.com' }}</div>
                                 </v-row>
-                                <v-row class="sub-text ma-0 pa-0 mt-4">
+                                <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 아이디</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerId }}</div>
+                                    <div>{{ receiptInfo.buyerId || 'kibum' }}</div>
                                 </v-row>
-                                <v-row class="sub-text ma-0 pa-0 mt-4">
+                                <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 전화번호</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerTel }}</div>
+                                    <div>{{ receiptInfo.buyerTel || '010-0000-0000' }}</div>
                                 </v-row>
-                            </v-card>
+                            </div>
                         </v-card-text>
                     </div>
                     <div class="pa-4">
