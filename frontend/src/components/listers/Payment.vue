@@ -285,13 +285,24 @@
                         email: me.requestInfo.buyerEmail,
                         tel: me.requestInfo.buyerTel
                     }
-                });
+                })
 
+                const result = await axios.post(`http://localhost:8088/payments`, {
+                    itemId: me.requestInfo.orderId,
+                    paymentId: me.paymentId,
+                    price: me.requestInfo.price,
+                    name: me.requestInfo.name,
+                    buyerId: me.requestInfo.buyerId,
+                    buyerName: me.requestInfo.buyerName,
+                    buyerTel: me.requestInfo.buyerTel,
+                    buyerEmail: me.requestInfo.buyerEmail,
+                })
+                const id = result.headers.location.split('/').pop(); // '2'를 가져옴
 
                 if (response.success) {
-                    await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
+                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentstatus`,
                         {
-                            id: me.requestInfo.orderId,
+                            itemId: me.requestInfo.orderId,
                             paymentId: me.paymentId,
                             status: "SUCCESS",
                             reason: response.message
@@ -299,9 +310,9 @@
                     )
                     alert(`결제 성공`)
                 } else {
-                    await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
+                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentstatus`,
                         {
-                            id: me.requestInfo.orderId,
+                            itemId: me.requestInfo.orderId,
                             paymentId: me.paymentId,
                             status: "SUCCESS",
                             reason: response.message

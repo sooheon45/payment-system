@@ -22,6 +22,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; // 주문 번호 
+    private Long itemId; // 요청 번호
     private String paymentId; // 결제 번호
     private Integer price; // 결제 금액
     private String name; // 결제 상품 이름
@@ -54,16 +55,16 @@ public class Payment {
     //<<< Clean Arch / Port Method
     public void receivePaymentStatus(ReceivePaymentStatusCommand receivePaymentStatusCommand) {
 
-        if(receivePaymentStatusCommand.getStatus().equals("SUCESS")) {
+        if(receivePaymentStatusCommand.getStatus().equals("SUCCESS")) {
             PaymentCompleted paymentCompleted = new PaymentCompleted(this);
-            paymentCompleted.setId(receivePaymentStatusCommand.getId());
+            paymentCompleted.setItemId(receivePaymentStatusCommand.getItemId());
             paymentCompleted.setPaymentId(receivePaymentStatusCommand.getPaymentId());
             paymentCompleted.setStatus(receivePaymentStatusCommand.getStatus());
             paymentCompleted.setReason(receivePaymentStatusCommand.getReason());
             paymentCompleted.publishAfterCommit();
         } else if(receivePaymentStatusCommand.getStatus().equals("CANCELLED")) {
             PaymentCancelled paymentCancelled = new PaymentCancelled(this);
-            paymentCancelled.setId(receivePaymentStatusCommand.getId());
+            paymentCancelled.setItemId(receivePaymentStatusCommand.getItemId());
             paymentCancelled.setPaymentId(receivePaymentStatusCommand.getPaymentId());
             paymentCancelled.setStatus(receivePaymentStatusCommand.getStatus());
             paymentCancelled.setReason(receivePaymentStatusCommand.getReason());
