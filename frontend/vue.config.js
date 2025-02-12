@@ -23,6 +23,13 @@ module.exports = {
         return options;
       });
   },
+  configureWebpack: {
+    output: {
+      libraryTarget: 'window',
+      filename: 'payment-system-app.js',
+      libraryExport: 'default',
+    },
+  },
   transpileDependencies: [
     'vuetify'
   ],
