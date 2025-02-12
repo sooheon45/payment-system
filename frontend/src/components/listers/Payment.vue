@@ -147,7 +147,7 @@
                             />
                         </div>
                         <!--   -->
-                        <v-card-text class="pb-0">
+                        <v-card-text v-if="isReceiptCompleted" class="pb-0">
                             <div>
                                 <v-divider class="my-2"></v-divider>
                                 <div class="sub-title">상품 정보</div>
