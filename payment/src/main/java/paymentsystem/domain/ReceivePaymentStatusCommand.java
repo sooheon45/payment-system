@@ -8,6 +8,7 @@ import lombok.Data;
 public class ReceivePaymentStatusCommand {
 
     private Long id;
+    private Long itemId;
     private String status;
     private String reason;
     private String paymentId;

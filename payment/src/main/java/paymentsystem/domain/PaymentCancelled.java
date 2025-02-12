@@ -12,6 +12,7 @@ import paymentsystem.infra.AbstractEvent;
 public class PaymentCancelled extends AbstractEvent {
 
     private Long id;
+    private Long itemId;
     private String paymentId;
     private String reason;
     private String status;
