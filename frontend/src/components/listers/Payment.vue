@@ -157,7 +157,6 @@
                                 dense
                             />
                         </div>
-                        <!--   -->
                         <v-card-text v-if="isReceiptCompleted" class="pb-0">
                             <div>
                                 <v-divider class="my-2"></v-divider>
@@ -174,12 +173,12 @@
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">상품명</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.name || '키보드' }}</div>
+                                    <div>{{ receiptInfo.name }}</div>
                                 </v-row>
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">가격</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.price || '129,000원' }}</div>
+                                    <div>{{ receiptInfo.price }}</div>
                                 </v-row>
                             </div>
 
@@ -189,22 +188,22 @@
                                 <v-row class="sub-text ma-0 pa-0">
                                     <div style="font-weight: 500;">구매자 성명</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerName || '박기범' }}</div>
+                                    <div>{{ receiptInfo.buyerName }}</div>
                                 </v-row>
                                 <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 이메일</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerEmail || 'kibum0405@gmail.com' }}</div>
+                                    <div>{{ receiptInfo.buyerEmail }}</div>
                                 </v-row>
                                 <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 아이디</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerId || 'kibum' }}</div>
+                                    <div>{{ receiptInfo.buyerId }}</div>
                                 </v-row>
                                 <v-row class="sub-text ma-0 pa-0 mt-2">
                                     <div style="font-weight: 500;">구매자 전화번호</div>
                                     <v-spacer></v-spacer>
-                                    <div>{{ receiptInfo.buyerTel || '010-0000-0000' }}</div>
+                                    <div>{{ receiptInfo.buyerTel }}</div>
                                 </v-row>
                             </div>
                         </v-card-text>
