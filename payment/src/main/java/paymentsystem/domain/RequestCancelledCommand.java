@@ -1,15 +1,14 @@
 package paymentsystem.domain;
 
-import java.time.LocalDate;
-import java.util.*;
 import lombok.Data;
 
 @Data
-public class ReceivePaymentStatusCommand {
+public class RequestCancelledCommand {
 
     private Long id;
     private Long itemId;
+    private String paymentId;
+    private Integer price;
     private String status;
     private String reason;
-    private String paymentId;
 }

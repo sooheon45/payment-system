@@ -1,18 +1,8 @@
 package paymentsystem.domain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.*;
 import lombok.Data;
 import paymentsystem.PaymentApplication;
-import paymentsystem.domain.PaymentCancelled;
-import paymentsystem.domain.PaymentCompleted;
-import paymentsystem.domain.PaymentRefunded;
-import paymentsystem.domain.RequestRefundCompleted;
-import paymentsystem.domain.RequstPaymentCompleted;
 
 @Entity
 @Table(name = "Payment_table")
@@ -21,9 +11,9 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id; // 주문 번호 
-    private Long itemId; // 요청 번호
-    private String paymentId; // 결제 번호
+    private Long id; // 결제 번호(고유번호) 
+    private Long itemId; // 다른 서비스의 고유 번호
+    private String paymentId; // PG 결제 번호
     private Integer price; // 결제 금액
     private String name; // 결제 상품 이름
     private String buyerId; // 구매자 아이디
@@ -44,33 +34,28 @@ public class Payment {
         return paymentRepository;
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public void requestRefund(RequestRefundCommand requestRefundCommand) {
+    public void requestCancelled(RequestCancelledCommand requestCancelledCommand) {
         //implement business logic here:
-
+        RequestCancelledCompleted requestCancelledCompleted = new RequestCancelledCompleted(this);
+        requestCancelledCompleted.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public void receivePaymentStatus(ReceivePaymentStatusCommand receivePaymentStatusCommand) {
-
-        if(receivePaymentStatusCommand.getStatus().equals("SUCCESS")) {
-            PaymentCompleted paymentCompleted = new PaymentCompleted(this);
-            paymentCompleted.setItemId(receivePaymentStatusCommand.getItemId());
-            paymentCompleted.setPaymentId(receivePaymentStatusCommand.getPaymentId());
-            paymentCompleted.setStatus(receivePaymentStatusCommand.getStatus());
-            paymentCompleted.setReason(receivePaymentStatusCommand.getReason());
-            paymentCompleted.publishAfterCommit();
-        } else if(receivePaymentStatusCommand.getStatus().equals("CANCELLED")) {
-            PaymentCancelled paymentCancelled = new PaymentCancelled(this);
-            paymentCancelled.setItemId(receivePaymentStatusCommand.getItemId());
-            paymentCancelled.setPaymentId(receivePaymentStatusCommand.getPaymentId());
-            paymentCancelled.setStatus(receivePaymentStatusCommand.getStatus());
-            paymentCancelled.setReason(receivePaymentStatusCommand.getReason());
-            paymentCancelled.publishAfterCommit();
-        }
+    public void receivePaymentCompleted(ReceivePaymentCompletedCommand receivePaymentCompletedCommand) {
+        //implement business logic here:
+        PaymentCompleted paymentCompleted = new PaymentCompleted(this);
+        paymentCompleted.setStatus(receivePaymentCompletedCommand.getStatus());
+        paymentCompleted.setReason(receivePaymentCompletedCommand.getReason());
+        paymentCompleted.publishAfterCommit();
     }
 
+    //>>> Clean Arch / Port Method
+    public void receiveCancelledCompleted(ReceiveCancelledCompletedCommand receiveCancelledCompletedCommand) {
+        //implement business logic here:
+        CancelledCompleted paymentCancelled = new CancelledCompleted(this);
+        paymentCancelled.setStatus(receiveCancelledCompletedCommand.getStatus());
+        paymentCancelled.setReason(receiveCancelledCompletedCommand.getReason());
+        paymentCancelled.publishAfterCommit();
+    }
 }
 //>>> DDD / Aggregate Root

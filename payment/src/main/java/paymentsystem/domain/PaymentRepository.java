@@ -10,5 +10,4 @@ import paymentsystem.domain.*;
 
 //<<< PoEAA / Repository
 @RepositoryRestResource(collectionResourceRel = "payments", path = "payments")
-public interface PaymentRepository
-    extends PagingAndSortingRepository<Payment, Long> {}
+public interface PaymentRepository extends PagingAndSortingRepository<Payment, Long> {}

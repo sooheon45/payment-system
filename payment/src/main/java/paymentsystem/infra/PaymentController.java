@@ -6,8 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 import paymentsystem.domain.*;
 
 //<<< Clean Arch / Inbound Adaptor
@@ -22,13 +21,13 @@ public class PaymentController {
 
    
     @RequestMapping(
-        value = "/payments/{id}/requestrefund",
+        value = "/payments/{id}/requestcancelled",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
-    public Payment requestRefund(
+    public Payment requestCancelled(
         @PathVariable(value = "id") Long id,
-        @RequestBody RequestRefundCommand requestRefundCommand,
+        @RequestBody RequestCancelledCommand requestCancelledCommand,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
@@ -37,29 +36,61 @@ public class PaymentController {
 
         optionalPayment.orElseThrow(() -> new Exception("No Entity Found"));
         Payment payment = optionalPayment.get();
-        payment.requestRefund(requestRefundCommand);
+        payment.requestCancelled(requestCancelledCommand);
+        payment.setStatus(requestCancelledCommand.getStatus());
+        payment.setReason(requestCancelledCommand.getReason());
+        paymentRepository.save(payment);
+        return payment;
+    }
+
+    @RequestMapping(
+        value = "/payments/{id}/receivepaymentcompleted",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Payment receivePaymentCompleted(
+        @PathVariable(value = "id") Long id,
+        @RequestBody ReceivePaymentCompletedCommand receivePaymentCompletedCommand,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws Exception {
+        System.out.println(
+            "##### /payment/receivePaymentCompleted  called #####"
+        );
+        Optional<Payment> optionalPayment = paymentRepository.findById(id);
+
+        optionalPayment.orElseThrow(() -> new Exception("No Entity Found"));
+        Payment payment = optionalPayment.get();
+        payment.receivePaymentCompleted(receivePaymentCompletedCommand);
+        payment.setStatus(receivePaymentCompletedCommand.getStatus());
+        payment.setReason(receivePaymentCompletedCommand.getReason());
 
         paymentRepository.save(payment);
         return payment;
     }
 
     @RequestMapping(
-        value = "/payments/{id}/receivepaymentstatus",
+        value = "/payments/{id}/receivecancelledcompleted",
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
-    public Payment receivePaymentStatus(
+    public Payment receiveCancelledCompleted(
         @PathVariable(value = "id") Long id,
-        @RequestBody ReceivePaymentStatusCommand receivePaymentStatusCommand,
+        @RequestBody ReceiveCancelledCompletedCommand receiveCancelledCompletedCommand,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
-        System.out.println("##### /payment/receivePaymentStatus  called #####");
+        System.out.println(
+            "##### /payment/receiveCancelledCompleted  called #####"
+        );
         Optional<Payment> optionalPayment = paymentRepository.findById(id);
 
         optionalPayment.orElseThrow(() -> new Exception("No Entity Found"));
         Payment payment = optionalPayment.get();
-        payment.receivePaymentStatus(receivePaymentStatusCommand);
+        payment.receiveCancelledCompleted(receiveCancelledCompletedCommand);
+        payment.setStatus(receiveCancelledCompletedCommand.getStatus());
+        payment.setReason(receiveCancelledCompletedCommand.getReason());
+
         paymentRepository.save(payment);
         return payment;
     }

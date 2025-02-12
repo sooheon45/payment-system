@@ -1,9 +1,6 @@
 package paymentsystem.domain;
 
-import java.time.LocalDate;
-import java.util.*;
 import lombok.*;
-import paymentsystem.domain.*;
 import paymentsystem.infra.AbstractEvent;
 
 //<<< DDD / Domain Event

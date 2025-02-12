@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card
+        <!-- <v-card
             class="mx-auto"
             outlined
             color="primary"
@@ -14,25 +14,25 @@
         </v-card>
         <v-col style="margin-bottom:40px;">
             <payment serviceType="receipt" :requestInfo="info"></payment>
-        </v-col>
+        </v-col> -->
     </div>
 </template>
 
 <script>
-    import Payment from './Payment.vue';
+    // import Payment from './Payment.vue';
 
     export default {
         name: 'search-receipt',
         components: {
-            'payment': Payment
+            // 'payment': Payment
         },
         data: () => ({
-            info: {} 
+            // info: {} 
         }),
         async created() {
-            this.info = {
-                paymentId : "payment-bcbdaea3-1c6c-4b19-8abc-bc35e0954d44", // 영수증 조회 주문번호
-            }
+            // this.info = {
+            //     id : "2", // 결제 번호
+            // }
         },
     };
 </script>

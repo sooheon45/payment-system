@@ -43,7 +43,7 @@
 
 <script>
 
-    const axios = require('axios').default;
+    // const axios = require('axios').default;
     import Payment from './Payment';
 
     export default {
@@ -60,37 +60,40 @@
             tick : true,
             // buyerInfoMode : false,
             requestInfo: {
-                orderId: '',
-                price: 0,
-                name: '',
-                buyerId: '',
-                buyerName: '',
-                buyerTel: '',
-                buyerEmail: '',
-                reason: ''
+                itemId: null, // 상품 번호
+                price: 0, // 상품 가격
+                name: '', // 상품 이름
+                buyerId: '', // 구매자 아이디
+                buyerName: '', // 구매자 이름
+                buyerTel: '', // 구매자 전화번호
+                buyerEmail: '', // 구매자 이메일
+                reason: '' // 환불 사유
             },
         }),
         async created() {
-            var me = this;
-            if(me.offline){
-                if(!me.values) me.values = [];
-                return;
-            } 
+            // var me = this;
+            // if(me.offline){
+            //     if(!me.values) me.values = [];
+            //     return;
+            // } 
 
-            var temp = await axios.get(axios.fixUrl('/payments'))
-            me.values = temp.data._embedded.payments;
+            // var temp = await axios.get(axios.fixUrl('/payments'))
+            // me.values = temp.data._embedded.payments;
             
-            me.newValue = {
-                'amount': 0,
-                'issuedDate': '2024-12-30',
-                'approvalDate': '2024-12-30',
-                'refunedDate': '2024-12-30',
-            }
+            // me.newValue = {
+            //     'amount': 0,
+            //     'issuedDate': '2024-12-30',
+            //     'approvalDate': '2024-12-30',
+            //     'refunedDate': '2024-12-30',
+            // }
+            this.setRequestInfo();
         },
         methods:{
             setRequestInfo() {
                 this.requestInfo = {
-                    orderId: '2',
+                    id: 2, // search 
+                    paymentId: 'payment-53f93879-79b9-467f-9958-71f0c483052b',
+                    itemId: 2,
                     price: 129000,
                     name: '키보드',
                     buyerId: 'kibum',

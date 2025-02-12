@@ -31,7 +31,7 @@
         }),
         async created() {
             this.info = {
-                paymentId : "payment-bcbdaea3-1c6c-4b19-8abc-bc35e0954d44", // 환불 주문번호
+                id : "payment-bcbdaea3-1c6c-4b19-8abc-bc35e0954d44", // 환불 주문번호
                 price : 10000, // 환불 가격
                 reason: "취소 사유" // 환불 사유
             }

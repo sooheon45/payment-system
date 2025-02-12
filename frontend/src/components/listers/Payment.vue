@@ -26,8 +26,9 @@
                             <h3 v-if="requestInfo.name" class="pb-2">{{ requestInfo.name }}</h3>
                             <v-row class="ma-0 pa-0">
                                 <div class="sub-text">
-                                    <div>결제 번호 : {{ paymentId }}</div>
-                                    <div>주문 번호 : {{ requestInfo.orderId }}</div>
+                                    <!-- <div>결제 번호 : {{ requestInfo.id }}</div>
+                                    <div>주문 번호 : {{ requestInfo.orderId }}</div> -->
+                                    <div>상품 번호 : {{ requestInfo.itemId }}</div>
                                 </div>
                             </v-row>
                         </div>
@@ -93,12 +94,21 @@
                             <div>
                                 <v-divider class="my-2 mt-0"></v-divider>
                                 <div class="sub-title">환불 정보 입력</div>
-                                <v-text-field v-model="requestInfo.paymentId"
+                                <v-text-field v-model="requestInfo.id"
                                     dense 
                                     outlined
                                     required 
                                     label="환불 주문번호 입력" 
                                 />
+                                <div>
+                                    <v-divider class="my-2"></v-divider>
+                                    <div class="sub-title">결제사(PG) 정보</div>
+                                    <v-row class="sub-text ma-0 pa-0">
+                                        <div style="font-weight: 500;">결제정보</div>
+                                        <v-spacer></v-spacer>
+                                        <div>{{ requestInfo.paymentId }}</div>
+                                    </v-row>
+                                </div>
                                 <v-textarea v-model="requestInfo.reason"
                                     class="delete-input-detail"
                                     dense
@@ -138,7 +148,8 @@
                     </v-row>
                     <div class="payment-dialog-scroll">
                         <div class="pa-4 pb-0">
-                            <v-text-field v-model="requestInfo.paymentId"
+                            <v-text-field 
+                                v-model="requestInfo.id"
                                 class="delete-input-detail"
                                 label="조회 주문번호 입력"
                                 outlined
@@ -147,7 +158,16 @@
                             />
                         </div>
                         <!--   -->
-                        <v-card-text class="pb-0">
+                        <v-card-text v-if="isReceiptCompleted" class="pb-0">
+                            <div>
+                                <v-divider class="my-2"></v-divider>
+                                <div class="sub-title">결제사(PG) 정보</div>
+                                <v-row class="sub-text ma-0 pa-0">
+                                    <div style="font-weight: 500;">결제정보</div>
+                                    <v-spacer></v-spacer>
+                                    <div>{{ receiptInfo.paymentId }}</div>
+                                </v-row>
+                            </div>
                             <div>
                                 <v-divider class="my-2"></v-divider>
                                 <div class="sub-title">상품 정보</div>
@@ -203,18 +223,17 @@
 
 <script>
     const axios = require('axios').default;
-    // import { v4 as uuidv4 } from 'uuid'; 
-    // import $ from 'jquery'; // jQuery를 import
     import * as PortOne from "@portone/browser-sdk";
 
     export default {
-        name: 'payment-service',
+        name: 'payment',
         props: {
             serviceType: String,
             requestInfo: {
                 type: Object,
                 default: () => ({
-                    orderId: "",
+                    id: null, // 결제번호 
+                    itemId: null,
                     price: 0,
                     name: "",
                     buyerId: "",
@@ -228,14 +247,8 @@
         },
         data: () => ({
             paymentId: `payment-${crypto.randomUUID()}`,
-            receiptInfo: {
-                name: "",
-                price: "",
-                buyerName: "",
-                buyerEmail: "",
-                buyerId: "",
-                buyerTel: ""
-            },
+            receiptId: null,
+            receiptInfo: {},
             isReceiptCompleted: false,
             openDialog: false,
         }),
@@ -271,6 +284,18 @@
         methods:{
             async pay(){
                 var me = this
+                const result = await axios.post(`http://localhost:8088/payments`, {
+                    itemId: me.requestInfo.itemId,
+                    paymentId: me.paymentId,
+                    price: me.requestInfo.price,
+                    name: me.requestInfo.name,
+                    buyerId: me.requestInfo.buyerId,
+                    buyerName: me.requestInfo.buyerName,
+                    buyerTel: me.requestInfo.buyerTel,
+                    buyerEmail: me.requestInfo.buyerEmail,
+                    status: "PAYMENT_REQUESTED",
+                })
+                const id = result.headers.location.split('/').pop();
                 const response = await PortOne.requestPayment({                    // Store ID 설정
                     storeId: "store-acb53ee1-ef4e-4966-b341-8c6a36d81096",
                     channelKey: "channel-key-c89519b6-bf42-4aac-b23a-cf92d4a28a6b",
@@ -287,59 +312,71 @@
                     }
                 })
 
-                const result = await axios.post(`http://localhost:8088/payments`, {
-                    itemId: me.requestInfo.orderId,
-                    paymentId: me.paymentId,
-                    price: me.requestInfo.price,
-                    name: me.requestInfo.name,
-                    buyerId: me.requestInfo.buyerId,
-                    buyerName: me.requestInfo.buyerName,
-                    buyerTel: me.requestInfo.buyerTel,
-                    buyerEmail: me.requestInfo.buyerEmail,
-                })
-                const id = result.headers.location.split('/').pop(); // '2'를 가져옴
-
                 if (response.success) {
-                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentstatus`,
+                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentcompleted`,
                         {
-                            itemId: me.requestInfo.orderId,
+                            itemId: me.requestInfo.itemId,
                             paymentId: me.paymentId,
-                            status: "SUCCESS",
+                            price: me.requestInfo.price,
+                            status: "PAYMENT_COMPLETED",
                             reason: response.message
                         }
                     )
                     alert(`결제 성공`)
                 } else {
-                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentstatus`,
+                    await axios.put(`http://localhost:8088/payments/${id}/receivepaymentcompleted`,
                         {
-                            itemId: me.requestInfo.orderId,
+                            itemId: me.requestInfo.itemId,
                             paymentId: me.paymentId,
-                            status: "SUCCESS",
+                            price: me.requestInfo.price,
+                            status: "PAYMENT_COMPLETED",
                             reason: response.message
                         }
                     )
                     alert(`결제 성공`)
-                    // await axios.put(`http://localhost:8088/payments/${me.requestInfo.orderId}/receivepaymentstatus`,
-                    //     {
-                    //         id: me.requestInfo.orderId,
-                    //         paymentId: me.paymentId,
-                    //         status: "CANCELLED",
-                    //         reason: response.message
-                    //     }
-                    // )
-                    // alert(`결제 실패 : ${response.message}`)
                 }
+                me.closeDialog()
             },  
             async refund(){
                 var me = this
                 try {
-                    let response = await axios.post(`https://api.portone.io/payments/${me.requestInfo.paymentId}/cancel`, {'Content-Type': 'application/json'}, {
-                        reason: me.requestInfo.reason
-                    })
+                    await axios.put(`http://localhost:8088/payments/${me.requestInfo.id}/requestcancelled`,
+                        {
+                            id: me.requestInfo.id,
+                            itemId: me.requestInfo.itemId,
+                            paymentId: me.requestInfo.paymentId,
+                            price: me.requestInfo.price,
+                            status: "CANCEL_REQUESTED",
+                            reason: me.requestInfo.reason
+                        }
+                    )
+
+                    let response = { status: 200 }
+                    // let response = await axios.post(`https://api.portone.io/payments/${me.requestInfo.paymentId}/cancel`, {'Content-Type': 'application/json'}, {
+                    //     reason: me.requestInfo.reason
+                    // })
                     if(response.status == 200) {
+                        await axios.put(`http://localhost:8088/payments/${me.requestInfo.id}/receivecancelledcompleted`,
+                            {
+                                id: me.requestInfo.id,
+                                itemId: me.requestInfo.itemId,
+                                paymentId: me.requestInfo.paymentId,
+                                price: me.requestInfo.price,
+                                status: "CANCEL_COMPLETED",
+                                reason: me.requestInfo.reason
+                            })
                         alert("환불 완료")
                     } else {
-                        alert("환불 실패")
+                        await axios.put(`http://localhost:8088/payments/${me.requestInfo.id}/receivecancelledcompleted`,
+                            {
+                                id: me.requestInfo.id,
+                                itemId: me.requestInfo.itemId,
+                                paymentId: me.requestInfo.paymentId,
+                                price: me.requestInfo.price,
+                                status: "CANCEL_COMPLETED",
+                                reason: me.requestInfo.reason
+                            })
+                        alert("환불 완료_실패")
                     }
                 }catch(e) {
                     alert("환불 실패")
@@ -349,13 +386,14 @@
                 var me = this
                 try {
                     me.isReceiptCompleted = false
-                    let response = await axios.get(`https://api.portone.io/payments/payments/${me.requestInfo.paymentId}`,{'Content-Type': 'application/json'})
+                    let response = await axios.get(`http://localhost:8088/payments/${me.requestInfo.id}`,{'Content-Type': 'application/json'})
                     if(response.status == 200) {
-                        me.receiptInfo.name = response.orderName
-                        me.receiptInfo.price = response.amount.paid
-                        me.receiptInfo.buyerName = response.customer.name
-                        me.receiptInfo.buyerEmail = response.customer.email
-                        me.receiptInfo.buyerTel = response.customer.phoneNumber
+                        me.receiptInfo.paymentId = response.data.paymentId
+                        me.receiptInfo.name = response.data.name
+                        me.receiptInfo.price = response.data.price
+                        me.receiptInfo.buyerName = response.data.buyerName
+                        me.receiptInfo.buyerEmail = response.data.buyerEmail
+                        me.receiptInfo.buyerTel = response.data.buyerTel
                         me.isReceiptCompleted = true
                     } else {
                         alert(`조회 실패 : ${response.message}`)

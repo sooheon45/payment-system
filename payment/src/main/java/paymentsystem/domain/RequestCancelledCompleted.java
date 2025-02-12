@@ -9,23 +9,22 @@ import paymentsystem.infra.AbstractEvent;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class PaymentRefunded extends AbstractEvent {
+public class RequestCancelledCompleted extends AbstractEvent {
 
     private Long id;
-    private String paymethod;
-    private String storeId;
-    private Integer price;
-    private Date timeStamp;
+    private Long itemId;
+    private String paymentId;
     private String name;
+    private Integer price;
     private String buyerName;
     private String buyerTel;
     private String buyerEmail;
 
-    public PaymentRefunded(Payment aggregate) {
+    public RequestCancelledCompleted(Payment aggregate) {
         super(aggregate);
     }
 
-    public PaymentRefunded() {
+    public RequestCancelledCompleted() {
         super();
     }
 }

@@ -13,9 +13,9 @@ public class PaymentCompleted extends AbstractEvent {
 
     private Long id;
     private Long itemId;
+    private String paymentId; // PG 결제 번호
     private String status;
     private String reason;
-    private String paymentId;
     
     public PaymentCompleted(Payment aggregate) {
         super(aggregate);

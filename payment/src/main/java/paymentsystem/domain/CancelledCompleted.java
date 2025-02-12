@@ -1,27 +1,24 @@
 package paymentsystem.domain;
 
-import java.time.LocalDate;
-import java.util.*;
 import lombok.*;
-import paymentsystem.domain.*;
 import paymentsystem.infra.AbstractEvent;
 
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class PaymentCancelled extends AbstractEvent {
+public class CancelledCompleted extends AbstractEvent {
 
     private Long id;
     private Long itemId;
-    private String paymentId;
+    private String paymentId; // paymentId
     private String reason;
     private String status;
 
-    public PaymentCancelled(Payment aggregate) {
+    public CancelledCompleted(Payment aggregate) {
         super(aggregate);
     }
 
-    public PaymentCancelled() {
+    public CancelledCompleted() {
         super();
     }
 }
