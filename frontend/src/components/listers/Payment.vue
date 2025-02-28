@@ -223,6 +223,7 @@
 <script>
     const axios = require('axios').default;
     import * as PortOne from "@portone/browser-sdk";
+    import { v4 as uuidv4 } from 'uuid';
 
     export default {
         name: 'payment',
@@ -245,7 +246,7 @@
             buyerInfoMode: Boolean,
         },
         data: () => ({
-            paymentId: `payment-${crypto.randomUUID()}`,
+            paymentId: `payment-${uuidv4()}`,
             receiptId: null,
             receiptInfo: {},
             isReceiptCompleted: false,
