@@ -91,13 +91,13 @@
         methods:{
             setRequestInfo() {
                 this.requestInfo = {
-                    id: 2, // search 
+                    id: 1, // search 
                     paymentId: 'payment-53f93879-79b9-467f-9958-71f0c483052b',
-                    itemId: 2,
+                    itemId: 1,
                     price: 129000,
                     name: '키보드',
                     buyerId: 'kibum',
-                    buyerName: '박기범',
+                    buyerName: '홍길동',
                     buyerTel: '010-0000-0000',
                     buyerEmail: 'kibum0405@gmail.com',
                     reason: ''
